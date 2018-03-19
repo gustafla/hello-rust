@@ -1,13 +1,14 @@
 enum Language {
-    English, German, Finnish
+    English, German, Finnish,
 }
 
 fn greet(language: Language) {
-    match language {
-        Language::English => println!("Hello rust"),
-        Language::German => println!("Hallo rust"),
-        Language::Finnish => println!("Hei rust"),
-    }
+    let greeting = match language {
+        Language::English => "Hello",
+        Language::German =>  "Hallo",
+        Language::Finnish => "Hei",
+    };
+    println!("{} Rust", greeting);
 }
 
 #[cfg(test)]
@@ -15,6 +16,6 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
-        greet(Language::Finnish);
+        greet(Language::Finnish)
     }
 }
