@@ -1,9 +1,22 @@
+use std::fmt;
+
 enum Language {
     English, German, Finnish,
 }
 
 struct Greeter {
     language: Language
+}
+
+impl fmt::Display for Greeter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let greeting = match self.language {
+            Language::English => "Hello",
+            Language::German =>  "Hallo",
+            Language::Finnish => "Hei",
+        };
+        write!(f, "{} Rust", greeting)
+    }
 }
 
 impl Greeter {
@@ -17,15 +30,6 @@ impl Greeter {
         self.language = language;
         self
     }
-
-    fn greet(self) {
-        let greeting = match self.language {
-            Language::English => "Hello",
-            Language::German =>  "Hallo",
-            Language::Finnish => "Hei",
-        };
-        println!("{} Rust", greeting);
-    }
 }
 
 #[cfg(test)]
@@ -33,6 +37,6 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
-        Greeter::new().with_language(Language::Finnish).greet()
+        println!("{}", Greeter::new().with_language(Language::Finnish));
     }
 }
