@@ -1,9 +1,11 @@
 use std::fmt;
 
+#[derive(Debug)]
 enum Language {
     English, German, Finnish,
 }
 
+#[derive(Debug)]
 struct Greeter {
     language: Language
 }
@@ -39,5 +41,6 @@ mod tests {
     fn it_works() {
         let greeter = Greeter::new().with_language(Language::Finnish);
         assert_eq!(format!("{}", greeter), "Hei Rust");
+        println!("{:?}", greeter);
     }
 }
