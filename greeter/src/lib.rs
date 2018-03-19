@@ -28,9 +28,10 @@ impl Greeter {
         }
     }
 
+    // moves ownership of self to parameter self, because it's not a referece
     fn with_language(mut self, language: Language) -> Greeter {
         self.language = language;
-        self
+        self // returns ownership of self (Greeter object) to caller
     }
 }
 
@@ -40,7 +41,7 @@ mod tests {
     #[test]
     fn it_works() {
         let greeter = Greeter::new().with_language(Language::Finnish);
-        assert_eq!(format!("{}", greeter), "Hei Rust");
+        assert_eq!(greeter.to_string(), "Hei Rust");
         println!("{:?}", greeter);
     }
 }
