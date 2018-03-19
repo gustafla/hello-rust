@@ -1,0 +1,8 @@
+# binaries
+*/target/
+
+# temp files and misc
+~*
+*.txt
+*.log
+tmp-*
