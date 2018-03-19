@@ -37,6 +37,7 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
-        println!("{}", Greeter::new().with_language(Language::Finnish));
+        let greeter = Greeter::new().with_language(Language::Finnish);
+        assert_eq!(format!("{}", greeter), "Hei Rust");
     }
 }
