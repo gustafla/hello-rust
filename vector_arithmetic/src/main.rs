@@ -21,4 +21,12 @@ fn main() {
     println!("{:?}", va::sub(&vec![0_f32, 0_f32], &vec![1_f32, -1_f32]));
     println!("{:?}", va::mul(&vec![1_f32, 1_f32], &vec![2_f32, -2_f32]));
     println!("{:?}", va::div(&vec![1_f32, 1_f32], &vec![2_f32, -2_f32]));
+
+    // Other ops
+    println!("(1, 0, 0) cross (0, 1, 0) = {:?}",
+        va::cross(&vec![1f32, 0f32, 0f32], &vec![0f32, 1f32, 0f32]));
+    println!("normalize (2, 0, 2) = {:?}",
+        va::normalize(&vec![2f32, 0f32, 2f32]));
+    println!("length(normalize (2, 0, 2)) = {:?}",
+        va::length(&va::normalize(&vec![2f32, 0f32, 2f32])));
 }

@@ -35,12 +35,23 @@ pub fn div(a: &Vec<f32>, b: &Vec<f32>) -> Vec<f32> {
     operate(a.as_slice(), b.as_slice(), |a, b| a / b)
 }
 
+pub fn cross(a: &Vec<f32>, b: &Vec<f32>) -> Vec<f32> {
+    [a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0]].to_vec()
+}
+
 pub fn dot(a: &Vec<f32>, b: &Vec<f32>) -> f32 {
     mul(a, b).iter().sum()
 }
 
 pub fn length(v: &Vec<f32>) -> f32 {
     v.iter().fold(0., |sum, &val| sum + val.powi(2)).sqrt()
+}
+
+pub fn normalize(v: &Vec<f32>) -> Vec<f32> {
+    let len = length(v);
+    div(v, &vec![len; v.len()]) // proof of concept hack, needs vector-scalar op
 }
 
 pub fn distance(a: &Vec<f32>, b: &Vec<f32>) -> f32 {
