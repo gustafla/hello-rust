@@ -35,6 +35,10 @@ pub fn div(a: &Vec<f32>, b: &Vec<f32>) -> Vec<f32> {
     operate(a.as_slice(), b.as_slice(), |a, b| a / b)
 }
 
+pub fn dot(a: &Vec<f32>, b: &Vec<f32>) -> f32 {
+    mul(a, b).iter().sum()
+}
+
 pub fn length(v: &Vec<f32>) -> f32 {
     v.iter().fold(0., |sum, &val| sum + val.powi(2)).sqrt()
 }

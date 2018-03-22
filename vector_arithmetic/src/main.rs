@@ -8,7 +8,10 @@ fn main() {
     // Define two points across an imaginary circle with r=1
     let point_a = vec![(pi/4f32).cos(), (pi/4f32).sin()];
     let point_b = vec![((pi/4f32)*5f32).cos(), ((pi/4f32)*5f32).sin()];
-    println!("{:?} and {:?}", point_a, point_b);
+    println!("a = {:?} and b = {:?}", point_a, point_b);
+
+    // Should be -1
+    println!("a dot b = {}", va::dot(&point_a, &point_b));
 
     // Should print "distance 2" (r * 2)
     println!("distance {}", va::distance(&point_a, &point_b));
