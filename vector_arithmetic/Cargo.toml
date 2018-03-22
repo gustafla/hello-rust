@@ -1,5 +1,5 @@
 [package]
-name = "structs"
+name = "vector_arithmetic"
 version = "0.1.0"
 authors = ["Lauri Gustafsson <luutifa@gmail.com>"]
 
