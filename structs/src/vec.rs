@@ -1,45 +1,29 @@
-use std::ops::{Add, Sub, Div, Mul};
+use std::vec::Vec;
 
-#[derive(Debug, Clone)]
-pub struct Vec2 {
-    pub x: f32,
-    pub y: f32,
+#[derive(Debug)]
+pub enum Error {
+    SizeMismatch,
 }
 
-impl Add for Vec2 {
-    type Output = Vec2;
-    fn add(self, other: Vec2) -> Vec2 {
-        Vec2 {x: self.x + other.x, y: self.y + other.y}
+pub fn length(v: &Vec<f32>) -> f32 {
+    v.iter().fold(0., |sum, &val| sum + val.powi(2)).sqrt()
+}
+
+pub fn sub(a: &Vec<f32>, b: &Vec<f32>) -> Result<Vec<f32>, Error> {
+    if a.len() == b.len() {
+        let mut result = Vec::with_capacity(a.len());
+        for i in 0..a.len() { // Slow but just a proof of concept
+            result.push(a[i] - b[i]);
+        }
+        Ok(result)
+    } else {
+        Err(Error::SizeMismatch)
     }
 }
 
-impl Sub for Vec2 {
-    type Output = Vec2;
-    fn sub(self, other: Vec2) -> Vec2 {
-        Vec2 {x: self.x - other.x, y: self.y - other.y}
-    }
-}
-
-impl Div for Vec2 {
-    type Output = Vec2;
-    fn div(self, other: Vec2) -> Vec2 {
-        Vec2 {x: self.x / other.x, y: self.y / other.y}
-    }
-}
-
-impl Mul for Vec2 {
-    type Output = Vec2;
-    fn mul(self, other: Vec2) -> Vec2 {
-        Vec2 {x: self.x * other.x, y: self.y * other.y}
-    }
-}
-
-impl Vec2 {
-    pub fn length(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-
-    pub fn distance_from(&self, other: &Vec2) -> f32 {
-        (self.clone() - other.clone()).length()
+pub fn distance(a: &Vec<f32>, b: &Vec<f32>) -> Result<f32, Error> {
+    match sub(a, b) {
+        Err(e) => Err(e),
+        Ok(result) => Ok(length(&result)),
     }
 }
