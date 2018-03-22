@@ -1,47 +1,24 @@
-#[derive(Debug)]
-struct Point {
-    x: f32,
-    y: f32,
-}
-
-impl Point {
-    fn length(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-
-    fn distance_from(&self, other: &Point) -> f32 {
-        // Destructure to variables ax, ay, bx, by
-        let Point {x: ax, y: ay} = *self;
-        let Point {x: bx, y: by} = *other;
-        let dx = ax - bx;
-        let dy = ay - by;
-
-        (dx.powi(2) + dy.powi(2)).sqrt()
-    }
-}
+mod vec; // "Include" src/vec.rs
+use vec::Vec2;
 
 #[derive(Debug)]
 struct Rectangle {
-    a: Point,
-    b: Point,
+    a: Vec2,
+    b: Vec2,
 }
 
 impl Rectangle {
-    fn area(&self) -> f32 {
-        // Nested destructuring
-        let Rectangle {a: Point {x: ax, y: ay}, 
-            b: Point {x: bx, y: by}} = *self;
-        let dx = bx - ax;
-        let dy = by - ay;
-
-        dx * dy
+    fn area(self) -> f32 {
+        // destructuring
+        let d: Vec2 = self.b - self.a;
+        d.x * d.y
     }
 }
 
 fn main() {
-    let point: Point = Point {x: 0.5, y: 0.2};
+    let point: Vec2 = Vec2 {x: 0.5, y: 0.2};
     println!("{:?}", point);
-    println!("{}", point.distance_from(&Point {x: 0., y: 0.}));
+    println!("{}", point.distance_from(&Vec2 {x: 0., y: 0.}));
 
-    let copy = Point {..point};
+    let copy = Vec2 {..point};
 }
