@@ -5,6 +5,7 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use sdl2::rect::Point;
 use sdl2::pixels;
 use std::vec::Vec;
 use rand::{Rng, thread_rng};
@@ -19,21 +20,23 @@ enum Cell {
 }
 
 struct Game {
-    state: [[Cell; HEIGHT as usize]; WIDTH as usize],
+    width: usize,
+    height: usize,
+    state: Vec<Vec<Cell>>,
 }
 
 impl Game {
-    fn new() -> Game {
-        Game {state: [[Cell::Dead; HEIGHT as usize]; WIDTH as usize]}
+    fn new(w: usize, h: usize) -> Game {
+        Game {width: w, height: h, state: vec![vec![Cell::Dead; h]; w]}
     }
 
-    fn with_randomized() -> Game {
-        let mut game = Game::new();
+    fn with_randomized(w: usize, h: usize) -> Game {
+        let mut game = Game::new(w, h);
         let mut rng = rand::thread_rng();
-        for x in 0..game.state.len() {
-            for y in 0..game.state[x].len() {
+        for x in game.state.iter_mut() {
+            for y in x.iter_mut() {
                 if rng.gen() {
-                    game.state[x][y] = Cell::Alive;
+                    *y = Cell::Alive;
                 }
             }
         }
@@ -42,8 +45,8 @@ impl Game {
 
     fn get_cell(&self, x: isize, y: isize) -> Cell {
         // Wrap around edges
-        let x = modulo(x, WIDTH as isize);
-        let y = modulo(y, HEIGHT as isize);
+        let x = modulo(x, self.width as isize);
+        let y = modulo(y, self.height as isize);
         self.state[x as usize][y as usize]
     }
 
@@ -53,7 +56,7 @@ impl Game {
             for j in y-1 .. y+2 {
                 if i == x && j == y {continue;}
                 match self.get_cell(x, y) {
-                    Cell::Alive => {n += 1;},
+                    Cell::Alive => n += 1,
                     _ => {},
                 }
             }
@@ -62,20 +65,20 @@ impl Game {
     }
 
     fn next_state(self) -> Game {
-        let mut next = Game::new();
-        for x in 0..self.state.len() {
-            for y in 0..self.state[x].len() {
+        let mut next = Game::new(self.state.len(), self.state[0].len());
+        for x in 0..self.width {
+            for y in 0..self.height {
                 let alive_neighbors = self.count_alive(x as isize, y as isize);
                 match self.state[x][y] {
                     Cell::Alive => {
                         match alive_neighbors {
-                            2 ... 3 => {next.state[x][y] = Cell::Alive;},
+                            2 ... 3 => next.state[x][y] = Cell::Alive,
                             _ => {},
                         }
                     },
                     Cell::Dead => {
                         match alive_neighbors {
-                            3 => {next.state[x][y] = Cell::Alive;},
+                            3 => next.state[x][y] = Cell::Alive,
                             _ => {},
                         }
                     },
@@ -86,11 +89,11 @@ impl Game {
     }
 
     fn render(&self, canvas: &mut Canvas<Window>) -> Result<(), String> {
-        let mut points = Vec::<sdl2::rect::Point>::with_capacity(((WIDTH*HEIGHT)/2) as usize);
-        for x in 0..self.state.len() {
-            for y in 0..self.state[x].len() {
+        let mut points = Vec::<Point>::with_capacity(((WIDTH*HEIGHT)/2) as usize);
+        for x in 0..self.width {
+            for y in 0..self.height {
                 if self.state[x][y] == Cell::Alive {
-                    points.push(sdl2::rect::Point::new(x as i32, y as i32));
+                    points.push(Point::new(x as i32, y as i32));
                 }
             }
         }
@@ -111,7 +114,7 @@ fn main() {
     let mut canvas = window.into_canvas().build().unwrap();
     let mut events = sdl_context.event_pump().unwrap();
 
-    let mut game = Game::with_randomized();
+    let mut game = Game::with_randomized(WIDTH as usize, HEIGHT as usize);
 
     'main: loop {
         for event in events.poll_iter() {
@@ -135,3 +138,4 @@ fn main() {
         game = game.next_state();
     }
 }
+
