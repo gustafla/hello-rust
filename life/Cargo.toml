@@ -1,0 +1,7 @@
+[package]
+name = "life"
+version = "0.1.0"
+authors = ["Lauri Gustafsson <luutifa@gmail.com>"]
+
+[dependencies]
+sdl2 = "^0"
