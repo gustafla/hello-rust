@@ -5,3 +5,4 @@ authors = ["Lauri Gustafsson <luutifa@gmail.com>"]
 
 [dependencies]
 sdl2 = "^0"
+rand = "0.4.2"
