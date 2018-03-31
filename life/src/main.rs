@@ -2,6 +2,7 @@ extern crate sdl2;
 
 mod game;
 
+use game::Game;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels;
@@ -17,7 +18,7 @@ fn main() {
     let mut canvas = window.into_canvas().build().unwrap();
     let mut events = sdl_context.event_pump().unwrap();
 
-    let mut game = game::Game::with_randomized(WIDTH as usize, HEIGHT as usize);
+    let mut game = Game::new(WIDTH as usize, HEIGHT as usize).with_randomized();
 
     'main: loop {
         for event in events.poll_iter() {
