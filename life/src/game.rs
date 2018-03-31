@@ -33,15 +33,12 @@ impl State {
 
     fn sprinkle(&mut self) -> Vec<Point> {
         let mut rng = rand::thread_rng();
-        let mut points = Vec::<Point>::with_capacity(self.width*self.height);
+        let mut points = Vec::<Point>::new();
         for x in 0..self.width {
             for y in 0..self.height {
-                match rng.gen_range(0, 8) {
-                    0 => {
-                        self.set_cell(x, y);
-                        points.push(Point::new(x as i32, y as i32));
-                    }
-                    _ => {}
+                if rng.gen_range(0, 8) == 0 {
+                    self.set_cell(x, y);
+                    points.push(Point::new(x as i32, y as i32));
                 }
             }
         }
@@ -57,17 +54,22 @@ impl State {
         // Wrap around edges
         let x = modulo(x, self.width as isize);
         let y = modulo(y, self.height as isize);
-        self.cells[x as usize][y as usize]
+        self.cells[x as usize][y as usize] //could be just isize?
     }
 
-    fn count_neighbors(&self, x: isize, y: isize) -> i32 {
+    fn count_neighbors(&self, x: usize, y: usize) -> i32 {
         let mut n = 0i32;
-        for i in x-1 .. x+2 {
-            for j in y-1 .. y+2 {
-                if i == x && j == y {continue;}
-                match self.get_cell(i, j) {
-                    Cell::Alive => n += 1,
-                    _ => {},
+
+        // Cast origin position to signed
+        let origin_x = x as isize;
+        let origin_y = y as isize;
+
+        for x in origin_x-1 .. origin_x+2 {
+            for y in origin_y-1 .. origin_y+2 {
+                // Exclude the origin cell from count
+                if x == origin_x && y == origin_y {continue;}
+                if self.get_cell(x, y) == Cell::Alive {
+                    n += 1;
                 }
             }
         }
@@ -77,7 +79,7 @@ impl State {
 
 pub struct Game {
     state: State,
-    points: Vec<Point>,
+    points: Vec<Point>, // State is also stored as points for rendering
 }
 
 impl Game {
@@ -89,6 +91,7 @@ impl Game {
     }
 
     pub fn with_randomized(mut self) -> Game {
+        // Sprinkle alive cells to state and store resulting points
         self.points.extend(self.state.sprinkle());
         self
     }
@@ -109,18 +112,17 @@ impl Game {
         // Iterate positions
         for x in 0..self.state.width {
             for y in 0..self.state.height {
-                let alive_neighbors = old_state.count_neighbors(x as isize, y as isize);
-                match old_state.get_cell(x as isize, y as isize) {
+                let alive_neighbors = old_state.count_neighbors(x, y);
+                match old_state.cells[x][y] { // slower get_cell not needed here
                     Cell::Alive => {
                         match alive_neighbors {
-                            2 ... 3 => self.points.push(self.state.set_cell(x, y)),
+                            2|3 => self.points.push(self.state.set_cell(x, y)),
                             _ => {},
                         }
                     },
                     Cell::Dead => {
-                        match alive_neighbors {
-                            3 => self.points.push(self.state.set_cell(x, y)),
-                            _ => {},
+                        if alive_neighbors == 3 {
+                            self.points.push(self.state.set_cell(x, y));
                         }
                     },
                 }
