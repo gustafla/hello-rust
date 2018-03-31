@@ -101,7 +101,7 @@ impl Game {
         canvas.draw_points(self.points.as_slice())
     }
 
-    pub fn next_state(mut self) -> Game {
+    pub fn next(mut self) -> Game {
         // Store old state
         let old_state = self.state;
         // Make a clean state

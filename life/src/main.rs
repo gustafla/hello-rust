@@ -39,6 +39,6 @@ fn main() {
         canvas.clear();
         game.render(&mut canvas).unwrap();
         canvas.present();
-        game = game.next_state();
+        game = game.next();
     }
 }
