@@ -54,7 +54,7 @@ impl State {
         // Wrap around edges
         let x = modulo(x, self.width as isize);
         let y = modulo(y, self.height as isize);
-        self.cells[x as usize][y as usize] //could be just isize?
+        self.cells[x as usize][y as usize] // Indexing must be usize
     }
 
     fn count_neighbors(&self, x: usize, y: usize) -> i32 {
