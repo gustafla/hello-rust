@@ -1,0 +1,6 @@
+[package]
+name = "fedora_mystery_dungeon"
+version = "0.1.0"
+authors = ["Lauri Gustafsson <luutifa@gmail.com>"]
+
+[dependencies]
