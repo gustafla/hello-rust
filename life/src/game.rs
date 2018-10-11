@@ -4,7 +4,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::rect::Point;
 use sdl2::pixels;
-use self::rand::{Rng, thread_rng};
+use self::rand::{Rng};
 use std::vec::Vec;
 
 pub fn modulo(a: isize, b: isize) -> isize {
